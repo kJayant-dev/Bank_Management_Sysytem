@@ -1,7 +1,7 @@
 import json 
-import random
-import string 
 from pathlib import Path 
+import string 
+import random
 
 
 class Bank:
@@ -13,9 +13,9 @@ class Bank:
             with open(database) as fs:
                 data = json.loads(fs.read())
         else:
-            print("no such file exist ")
+            print("No such file exist ")
     except Exception as err:
-        print(f"an exception occured as {err}")
+        print(f"An exception occured as {err}")
     
     @classmethod
     def __update(cls):
@@ -35,38 +35,40 @@ class Bank:
 
     def Createaccount(self):
         info = {
-            "name": input("Tell your name :- "),
-            "age" : int(input("tell your age :- ")),
-            "email": input("tell your email :- "),
-            "pin": int(input("tell your 4 number pin :- ")),
+            "name": input("Enter your name :- "),
+            "age" : int(input("Enter your age :- ")),
+            "email": input("Enter your email :- "),
+            "pin": int(input("Enter your 4 number pin :- ")),
             "accountNo." : Bank.__accountgenerate(),
             "balance" : 0
         }
-        if info['age'] < 18  or len(str(info['pin'])) != 4:
-            print("sorry you cannot create your account")
+        if info['age'] < 18  :
+            print("Sorry you cannot create your account because your age is less than 18 ")
+        if len(str(info['pin'])) != 4 :
+            print("Your PIN is not Valid ")
         else:
-            print("account has been created successfully")
+            print("Account has been created successfully")
             for i in info:
                 print(f"{i} : {info[i]}")
-            print("please note down your account number")
+            print("Please note down your account number for Further purpose...")
 
             Bank.data.append(info)
 
             Bank.__update()
         
     def depositmoney(self):
-        accnumber = input("please tell your account number ")
-        pin = int(input("please tell your pin aswell "))
+        accnumber = input("Enter your account number : ")
+        pin = int(input("Enter your PIN :  "))
 
         userdata = [i for i in Bank.data if i['accountNo.'] == accnumber and i['pin'] == pin]
 
         if userdata == False:
-            print("soory no data found")
+            print("Data Not exist in Database...")
         
         else:
-            amount = int(input("how much you want to depoit "))
+            amount = int(input("How much you want to depoit : "))
             if amount  > 10000 or amount < 0:
-                print("sorry the amount is too much you can deposit below 10000 and above 0")
+                print("Sorry the amount is too much you can deposit below 10000 and above 0")
 
             else:
                 userdata[0]['balance'] += amount
@@ -75,18 +77,18 @@ class Bank:
     
 
     def withdrawmoney(self):
-        accnumber = input("please tell your account number ")
-        pin = int(input("please tell your pin aswell "))
+        accnumber = input("Enter your account number : ")
+        pin = int(input("Enter your PIN :  "))
 
         userdata = [i for i in Bank.data if i['accountNo.'] == accnumber and i['pin'] == pin]
 
         if userdata == False:
-            print("soory no data found")
+            print("Data Not exist in Database...")
         
         else:
-            amount = int(input("how much you want to withdraw "))
+            amount = int(input("How much you want to withdraw : "))
             if userdata[0]['balance']  < amount:
-                print("soory you dont have that much money")
+                print("Soory you dont have that much money")
               
             else:
                 
@@ -97,34 +99,34 @@ class Bank:
 
     def showdetails(self):
 
-        accnumber = input("please tell your account number ")
-        pin = int(input("please tell your pin aswell "))
+        accnumber = input("Enter your account number ")
+        pin = int(input("Enter your PIN : "))
 
         userdata = [i for i in Bank.data if i['accountNo.'] == accnumber and i['pin'] == pin]
-        print("your information are \n\n\n")
+        print("Your information are \n\n\n")
         for i in userdata[0]:
             print(f"{i} : {userdata[0][i]}")
 
 
 
     def updatedetails(self):
-        accnumber = input("please tell your account number ")
-        pin = int(input("please tell your pin aswell "))
+        accnumber = input("Enter your account number : ")
+        pin = int(input("Enter your PIN :  "))
 
         userdata = [i for i in Bank.data if i['accountNo.'] == accnumber and i['pin'] == pin]
 
         if userdata == False:
-            print("no such user found ")
+            print("Data Not exist in Database...")
         
         else:
-            print("you cannot change the age, account number, balance")
+            print("You cannot change the age, account number, balance")
 
             print("Fill the details for change or leave it empty if no change")
 
             newdata = {
-                "name": input("please tell new name or press enter : "),
-                "email":input("please tell your new Email or press enter to skip :"),
-                "pin": input("enter new Pin or press enter to skip: ")
+                "name": input("please tell new name : "),
+                "email":input("please tell your new Email  :"),
+                "pin": input("enter new PIN : ")
             }
 
             if newdata["name"] == "":
@@ -150,25 +152,25 @@ class Bank:
                      userdata[0][i] = newdata[i]
 
             Bank.__update()
-            print("details updated successfully")
+            print("Details updated successfully")
 
 
     def Delete(self):
-        accnumber = input("please tell your account number ")
-        pin = int(input("please tell your pin aswell "))
+        accnumber = input("Enter your account number :  ")
+        pin = int(input("Enter tell your PIN :  "))
 
         userdata = [i for i in Bank.data if i['accountNo.'] == accnumber and i['pin'] == pin]
 
         if userdata == False:
-            print("sorry no such data exist ")
+            print("Data Not exist in Database... ")
         else:
-            check = input("press y if you actually want to delete the account or press n")
+            check = input("Press (y) if you actually want to delete the account or press (n)")
             if check == 'n' or check == "N":
                 print("bypassed")
             else:
                 index = Bank.data.index(userdata[0])
                 Bank.data.pop(index)
-                print("account deleted successfully ")
+                print("Account deleted successfully ")
                 Bank.__update()
 
             
@@ -177,34 +179,34 @@ user = Bank()
 
 while True:
 
-    print("press 1 for creating an account")
-    print("press 2 for Deposititing the money in the bank ")
-    print("press 3 for withdrawing the money ")
-    print("press 4 for details ")
-    print("press 5 for updating the details")
-    print("press 6 for deleting your account")
-    print("press 7 Exit")
+    print("1  Creating an Account")
+    print("2  Deposititing the money in the bank Account ")
+    print("3  Withdrawing the money ")
+    print("4  Display Your Details  ")
+    print("5  Updating the details")
+    print("6  Deleting your account")
+    print("7 Exit")
 
-    check = int(input("tell your response :- "))
+    check = int(input("Enter your Choice :  :- "))
 
     if check == 1:
         user.Createaccount()
 
-    if check == 2:
+    elif check == 2:
         user.depositmoney()
 
-    if check == 3:
+    elif check == 3:
         user.withdrawmoney()
 
-    if check == 4:
+    elif check == 4:
         user.showdetails()
 
-    if check == 5:
+    elif check == 5:
         user.updatedetails()
 
-    if check == 6:
+    elif check == 6:
         user.Delete()
-    if check == 7:
+    elif check == 7:
         print("Thank You...")
         break
     else:
